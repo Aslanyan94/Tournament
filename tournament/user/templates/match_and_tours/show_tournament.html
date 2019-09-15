@@ -1,0 +1,33 @@
+{% extends "home/base.html" %}
+{% load crispy_forms_tags %}
+{% block for_profile %}
+    <div class="col-md-4">
+    <div class="content-section">
+        <h3>Add or Change following</h3>
+        <p class='text-muted'>You can add Matches and change your Tournamentes.
+        <ul class="list-group">
+            <li class="list-group-item list-group-item-light">
+                <a class="nav-item nav-link" href="change/">Change Tournament</a>
+            </li>
+            <li class="list-group-item list-group-item-light">
+                <a class="nav-item nav-link" href="match/">Match</a>
+            </li>
+        </ul>
+        </p>
+    </div>
+    </div>
+{% endblock for_profile%}
+
+{% block content %}
+    <h1>{{ tour.name }}</h1>
+    <h4>Player1 - {{ tour.player1 }}</h4>
+    <h4>Player2 - {{ tour.player2 }}</h4>
+    <h4>Player3 - {{ tour.player3 }}</h4>
+    <h4>Player4 - {{ tour.player4 }}</h4>
+    <h4>Player5 - {{ tour.player5 }}</h4>
+    <h4>Player6 - {{ tour.player6 }}</h4>
+    <h4>Player7 - {{ tour.player7 }}</h4>
+    <h4>Player8 - {{ tour.player8 }}</h4>
+    <h6>Tournoment started at - {{ tour.stared_at }}</h6>
+
+{% endblock content %}

@@ -1,0 +1,19 @@
+{% extends "home/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div>
+        {% for name_dic in tour %}
+            <article class="media content-section">
+              <div class="media-body">
+                <div class="article-metadata">
+                    <h1>{{tour.slug}}</h1>
+                    <h2> <a class="mr-2" href="{% url 'show_tournament' tournament_name_slug=name_dic.slug %}">{{ name_dic.name }}</a> </h2>
+                    {% if title %}
+                        <h5> <a class="ml-1" href="tournament/{{ name_dic.slug }}/change">Edit</a> </h5>
+                    {% endif %}
+                </div>
+              </div>
+            </article>
+        {% endfor %}
+    </div>
+{% endblock content %}
