@@ -1,6 +1,9 @@
 {% extends "home/base.html" %}
+{% load static %}
 {% load crispy_forms_tags %}
 {% block for_profile %}
+
+{% if user.is_authenticated %}
     <div class="col-md-4">
     <div class="content-section">
         <h3>Add or Change following</h3>
@@ -10,24 +13,127 @@
                 <a class="nav-item nav-link" href="change/">Change Tournament</a>
             </li>
             <li class="list-group-item list-group-item-light">
-                <a class="nav-item nav-link" href="match/">Match</a>
+                    <a class="nav-item nav-link" href="add_match/">Add Match</a>
             </li>
         </ul>
         </p>
     </div>
     </div>
+{% endif %}
 {% endblock for_profile%}
 
 {% block content %}
-    <h1>{{ tour.name }}</h1>
-    <h4>Player1 - {{ tour.player1 }}</h4>
-    <h4>Player2 - {{ tour.player2 }}</h4>
-    <h4>Player3 - {{ tour.player3 }}</h4>
-    <h4>Player4 - {{ tour.player4 }}</h4>
-    <h4>Player5 - {{ tour.player5 }}</h4>
-    <h4>Player6 - {{ tour.player6 }}</h4>
-    <h4>Player7 - {{ tour.player7 }}</h4>
-    <h4>Player8 - {{ tour.player8 }}</h4>
-    <h6>Tournoment started at - {{ tour.stared_at }}</h6>
 
+        <link rel="stylesheet" type="text/css" href="{% static 'home/table.css' %}">
+        <table class="blueTable">
+        <thead>
+        <tr>
+            <th><h3 style="color: white">{{ tour.name }}  <small>started at - {{ tour.stared_at }}
+            </small></h3></th>
+        </tr>
+        </thead>
+        <tr>
+            <td><b>{{ tour.player1 }}</b></td>
+        </tr>
+        <tr>
+            <td><b>{{ tour.player2 }}</b></td>
+        </tr>
+        <tr>
+            <td><b>{{ tour.player3 }}</b></td>
+        </tr>
+        <tr>
+            <td><b>{{ tour.player4 }}</b></td>
+        </tr>
+        <tr>
+            <td><b>{{ tour.player5 }}</b></td>
+        </tr>
+        <tr>
+            <td><b>{{ tour.player6 }}</b></td>
+        </tr>
+        <tr>
+            <td><b>{{ tour.player7 }}</b></td>
+        </tr>
+                <tr>
+            <td><b>{{ tour.player8 }}</b></td>
+        </tr>
+
+        </table>
+<div>
+
+    <legend class="border-bottom mb-4"><br>Matches</legend>
+    <link rel="stylesheet" type="text/css" href="{% static 'home/table.css' %}">
+    {% if match1 %}
+    <h3 style="text-align:center; color:blue;">Quarter</h3>
+    <table class="blueTable">
+        <thead>
+        <tr>
+            <th>Player 1</th>
+            <th>Score 1</th>
+            <th>Score 2</th>
+            <th>Player 2</th>
+        </tr>
+        </thead>
+        {% for match in match1 %}
+            <tbody>
+            <tr>
+                <td>{{match.player1}}</td>
+                <th>{{match.score1}}</th>
+                <th>{{match.score2}}</th>
+                <td>{{match.player2}}</td>
+            </tbody>
+        {% endfor %}
+    </table>
+    {% endif %}
+        {% if match2 %}
+    <h3 style="text-align:center; color:blue;">Semifinal</h3>
+    <table class="blueTable">
+        <thead>
+        <tr>
+            <th>Player 1</th>
+            <th>Score 1</th>
+            <th>Score 2</th>
+            <th>Player 2</th>
+        </tr>
+        </thead>
+        {% for match in match2 %}
+            <tbody>
+            <tr>
+                <td>{{match.player1}}</td>
+                <th>{{match.score1}}</th>
+                <th>{{match.score2}}</th>
+                <td>{{match.player2}}</td>
+            </tbody>
+        {% endfor %}
+    </table>
+    {% endif %}
+    {% if match3 %}
+    <h3 style="text-align:center; color:blue;">Final</h3>
+    <table class="blueTable">
+        <thead>
+        <tr>
+            <th>Player 1</th>
+            <th>Score 1</th>
+            <th>Score 2</th>
+            <th>Player 2</th>
+        </tr>
+        </thead>
+        {% for match in match3 %}
+            <tbody>
+            <tr>
+                <td>{{match.player1}}</td>
+                <th>{{match.score1}}</th>
+                <th>{{match.score2}}</th>
+                <td>{{match.player2}}</td>
+            </tbody>
+        {% endfor %}
+    </table>
+            {% for match in match3 %}
+            {% if match.score1 > match.score2 %}
+                <h1 style="color: blue">Tournament winner is {{ match.player1 }}</h1>
+            {% else %}
+                <h1 style="color: blue">Tournament winner is {{ match.player2 }}</h1>
+            {% endif %}
+            {% endfor %}
+    {% endif %}
+</div>
 {% endblock content %}

@@ -1,0 +1,64 @@
+{% extends "home/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+<form id="add_match" method="post" action="">
+    {% csrf_token %}
+    <link rel="stylesheet" type="text/css" href="{% static 'home/table.css' %}">
+    <table class="blueTable">
+        <thead>
+        <tr>
+            <th>Round</th>
+            <th>Player 1</th>
+            <th>Score 1</th>
+            <th>Score 2</th>
+            <th>Player 2</th>
+        </tr>
+        </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <select name="round_ch">
+                        <option value={{form.round_ch}}></option>
+                    </select>
+                </td>
+                <td>
+                    <label for="player1"></label>
+                    <select name="player1">
+        <option value="{{ tour.player1 }}">{{ tour.player1 }}</option>
+        <option value="{{ tour.player2 }}">{{ tour.player2 }}</option>
+        <option value="{{ tour.player3 }}">{{ tour.player3 }}</option>
+        <option value="{{ tour.player4 }}">{{ tour.player4 }}</option>
+        <option value="{{ tour.player5 }}">{{ tour.player5 }}</option>
+        <option value="{{ tour.player6 }}">{{ tour.player6 }}</option>
+        <option value="{{ tour.player7 }}">{{ tour.player7 }}</option>
+        <option value="{{ tour.player8 }}">{{ tour.player8 }}</option>
+    </select></td>
+                <th>
+                    <label for="score1"></label>
+                    <input type="number" name="score1" size="2" maxlength="2" placeholder={{form.score1}}>
+                </th>
+                <th>
+                    <label for="score2"></label>
+                    <input type="number" name="score2" placeholder={{form.score2}} ></th>
+                <td>
+                    <label for="player2"></label>
+                    <select name="player2">
+        <option value="{{ tour.player2 }}">{{tour.player2}}</option>
+        <option value="{{ tour.player1 }}">{{tour.player1}}</option>
+        <option value="{{ tour.player3 }}">{{tour.player3}}</option>
+        <option value="{{ tour.player4 }}">{{tour.player4}}</option>
+        <option value="{{ tour.player5 }}">{{tour.player5}}</option>
+        <option value="{{ tour.player6 }}">{{tour.player6}}</option>
+        <option value="{{ tour.player7 }}">{{tour.player7}}</option>
+        <option value="{{ tour.player8 }}">{{tour.player8}}</option>
+    </select>
+                </td>
+            </tbody>
+    </table>
+     <div class="form-group">
+         <br></div>
+        <button class="btn btn-outline-info" type="submit">Add match</button>
+     </div>
+</form>
+{% endblock content %}

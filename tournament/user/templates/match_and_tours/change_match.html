@@ -1,0 +1,19 @@
+{% extends "home/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <h2>{{ match }}</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <h4>{{match.player1}}   -   {{ match.player2 }}</h4>
+            <fieldset class="form-group">
+                <label for="score1"></label>
+                <input type="number" name="score1" value={{form.score1}} >
+                <label for="score2"></label>
+                <input type="number" name="score2" value={{form.score2}} >
+            </fieldset>
+            <div class="form-group">
+
+                <button class="btn btn-outline-info" type="submit">Commit</button>
+            </div>
+        </form>
+{% endblock content %}
