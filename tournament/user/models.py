@@ -13,7 +13,7 @@ class UserModel(models.Model):
         return self.user.username
 
     class Meta:
-        verbose_name_plural = 'UserModel'
+        verbose_name_plural = 'User Model'
 
 
 class TournamentModel(models.Model):
@@ -35,32 +35,34 @@ class TournamentModel(models.Model):
         super(TournamentModel, self).save(*args, **kwargs)
 
     class Meta:
-        verbose_name_plural = 'TournamentModel'
+        verbose_name_plural = 'Tournament'
 
     def __str__(self):
-        return self.user.username
+        return self.name
 
 
 class Match(models.Model):
     tournament = models.ForeignKey(TournamentModel, on_delete=models.CASCADE)
-    tour = TournamentModel()
-    player_choice = (
-        (1, tour.player1),
-        (2, tour.player2),
-        (3, tour.player3),
-        (4, tour.player4),
-        (5, tour.player5),
-        (6, tour.player6),
-        (7, tour.player7),
-        (8, tour.player8),
-    )
-    ROUND_CHOICE = (
+    player1 = models.CharField(max_length=30)
+    player2 = models.CharField(max_length=30)
+    score1 = models.PositiveSmallIntegerField(default=0)
+    score2 = models.PositiveSmallIntegerField(default=0)
+
+    ROUND_CHOICE = [
         (1, 'quarter'),
         (2, 'semifinal'),
         (3, 'final'),
-    )
-    player1 = models.PositiveSmallIntegerField(default=1, choices=player_choice)
-    player2 = models.PositiveSmallIntegerField(default=2, choices=player_choice)
-    score1 = models.PositiveSmallIntegerField(default=0)
-    score2 = models.PositiveSmallIntegerField(default=0)
+    ]
     round_ch = models.SmallIntegerField(default=1, choices=ROUND_CHOICE)
+    slug = models.SlugField(unique=True,)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(f'{self.player1}-{self.player2}')
+        super(Match, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return f'{self.tournament.name} {self.player1} vs {self.player2}'
+
+    class Meta:
+        verbose_name_plural = 'Matches'
+

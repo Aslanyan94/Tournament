@@ -6,6 +6,8 @@
     <fieldset class="form-group">
         <legend class="border-bottom mb-4">My match test form</legend>
             {{ form|crispy }}
+        {% if slug %}
+
     </fieldset>
     <div class="form-group">
         <button class="btn btn-outline-info" type="submit">commit</button>

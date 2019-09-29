@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
-from .forms import UserRegisterForm, UserUpdateForm, PictureUpdateForm, TournamentForm, MatchForms
+from .forms import UserRegisterForm, UserUpdateForm, PictureUpdateForm, TournamentForm, MatchForms, MatchUpdateForm
 from .models import UserModel, TournamentModel, Match
 from django.http import HttpResponseRedirect
 
@@ -46,29 +46,44 @@ def profile(request):
 def add_tournament(request):
     if request.method == 'POST':
         form = TournamentForm(request.POST)
+        tour_user = User.objects.get(username=request.user.username)
         if form.is_valid():
-            tour_model = TournamentModel()
-            tour_model.user = request.user
-            tour_model.name = form.cleaned_data['name']
-            tour_model.player1 = form.cleaned_data['player1']
-            tour_model.player2 = form.cleaned_data['player2']
-            tour_model.player3 = form.cleaned_data['player3']
-            tour_model.player4 = form.cleaned_data['player4']
-            tour_model.player5 = form.cleaned_data['player5']
-            tour_model.player6 = form.cleaned_data['player6']
-            tour_model.player7 = form.cleaned_data['player7']
-            tour_model.player8 = form.cleaned_data['player8']
-
-            tour_model.save()
-            return redirect('profile')
+            tour = form.save(commit=False)
+            tour.user = tour_user
+            tour.save()
+            return redirect('home')
     else:
         form = TournamentForm()
     return render(request, 'match_and_tours/add_tournament.html', {'form': form})
 
 
+def add_match(request, tournament_name_slug=None):
+    if request.method == 'POST':
+        form = MatchForms(request.POST)
+        tour = TournamentModel.objects.get(slug=tournament_name_slug)
+        if form.is_valid():
+            match = form.save(commit=False)
+            match.tournament = tour
+            match.save()
+            return redirect('home')
+    else:
+        tour = TournamentModel.objects.get(slug=tournament_name_slug)
+        form = MatchForms()
+    return render(request, 'match_and_tours/add_match.html', {'tour': tour, 'form': form})
+
+
 def show_tournament(request, tournament_name_slug=None):
     tour = TournamentModel.objects.get(slug=tournament_name_slug)
-    return render(request, 'match_and_tours/show_tournament.html', {'tour': tour})
+    match = Match.objects.filter(tournament=tour)
+    match1 = match.filter(round_ch=1)
+    match2 = match.filter(round_ch=2)
+    match3 = match.filter(round_ch=3)
+    return render(request, 'match_and_tours/show_tournament.html', {
+        'tour': tour,
+        'match1': match1,
+        'match2': match2,
+        'match3': match3,
+        })
 
 
 def home(request):
@@ -84,14 +99,27 @@ def my_tours(request):
     return render(request, 'home/home.html', {'tour': tour})
 
 
-def add(request):
+def change_tour(request, tournament_name_slug=None):
+    tour = TournamentModel.objects.get(slug=tournament_name_slug)
+    form = TournamentForm(instance=tour)
     if request.method == 'POST':
-        form = MatchForms(request.POST)
-        tour = TournamentModel.objects.get(slug='la-liga')
-        form.name = tour
+        form = TournamentForm(request.POST, instance=tour)
         if form.is_valid():
             form.save()
-        return redirect('home')
-    form = MatchForms()
-    return render(request, 'home/add.html', {'form': form})
+            return redirect('home')
+    return render(request, 'match_and_tours/add_tournament.html', {'form': form})
+
+
+def change_match(request, tournament_name_slug=None, match_id_slug=None):
+    tour = TournamentModel.objects.get(slug=tournament_name_slug)
+    match = Match.objects.get(tournament=tour, slug=match_id_slug)
+    form = MatchUpdateForm()
+    if request.method == 'POST':
+        form = MatchUpdateForm(request.POST)
+        if form.is_valid():
+            match.score1 = form.cleaned_data['score1']
+            match.score2 = form.cleaned_data['score2']
+            match.save()
+            return redirect('home')
+    return render(request, 'match_and_tours/change_match.html', {'form': form, 'match': match},)
 

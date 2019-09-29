@@ -2,6 +2,7 @@
 {% load crispy_forms_tags %}
 {% if user.is_authenticated %}
     {% block for_profile %}
+    {% if user.is_authenticated %}
     <div class="col-md-4">
     <div class="content-section">
         <ul class="list-group">
@@ -9,12 +10,13 @@
                 <a class="nav-item nav-link" href="{% url 'my_tours' %}">My tournaments</a>
             </li>
             <li class="list-group-item list-group-item-light">
-                <a class="nav-item nav-link" href="#">Latest tournaments</a>
+                <a class="nav-item nav-link" href="{% url 'add_tournament' %}">Add tournament</a>
             </li>
         </ul>
         </p>
     </div>
     </div>
+    {% endif %}
     {% endblock for_profile%}
 {% endif %}
 {% block content %}
@@ -25,9 +27,6 @@
                 <div class="article-metadata">
                     <h1>{{tour.slug}}</h1>
                     <h2> <a class="mr-2" href="{% url 'show_tournament' tournament_name_slug=name_dic.slug %}">{{ name_dic.name }}</a> </h2>
-                    {% if title %}
-                        <h5> <a class="ml-1" href="tournament/{{ name_dic.slug }}/change">Edit</a> </h5>
-                    {% endif %}
                 </div>
               </div>
             </article>

@@ -22,7 +22,7 @@ class PictureUpdateForm(forms.ModelForm):
         fields = ['image']
 
 
-class TournamentForm(forms.Form):
+class TournamentForm(forms.ModelForm):
     name = forms.CharField(label='Tournament Name')
     player1 = forms.CharField()
     player2 = forms.CharField()
@@ -33,11 +33,17 @@ class TournamentForm(forms.Form):
     player7 = forms.CharField()
     player8 = forms.CharField()
 
+    class Meta:
+        model = TournamentModel
+        exclude = ('user', 'stared_at', 'slug')
+
 
 class MatchForms(forms.ModelForm):
-
     class Meta:
         model = Match
-        fields = ['tournament', 'round_ch', 'player1', 'score1', 'score2', 'player2']
+        exclude = ('tournament', 'slug')
 
 
+class MatchUpdateForm(forms.Form):
+    score1 = forms.IntegerField()
+    score2 = forms.IntegerField()
